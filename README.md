@@ -10,7 +10,7 @@ Installing `wine` and `winetricks` on Steamdeck/other systems is outside the sco
 
 ## dgVoodoo2
 
-[dgVoodoo2](https://dege.freeweb.hu/dgVoodoo2/dgVoodoo2) wraps older graphics API calls into newer ones which lets old games (like FFXI) better utilize modern GPUs. You should get consistently higher FPS when using this.
+[dgVoodoo2](https://dege.freeweb.hu/dgVoodoo2/dgVoodoo2) wraps older graphics API calls with newer ones which lets old games (like FFXI) better utilize modern GPUs. You should get consistently higher FPS when using this.
 
 Note that this has only been tested when running the game via Steam. It _should_ still work without Steam provided you set the correct environment variables.
 
