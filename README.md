@@ -10,11 +10,11 @@ Installing `wine` and `winetricks` on Steamdeck/other systems is outside the sco
 
 ## dgVoodoo2
 
-`dgVoodoo2` wraps older graphics API calls into newer ones which lets old games (like FFXI) better utilize modern GPUs. You should get consistently higher FPS when using this.
+[dgVoodoo2](https://dege.freeweb.hu/dgVoodoo2/dgVoodoo2) wraps older graphics API calls into newer ones which lets old games (like FFXI) better utilize modern GPUs. You should get consistently higher FPS when using this.
 
 Note that this has only been tested when running the game via Steam. It _should_ still work without Steam provided you set the correct environment variables.
 
-[dgVoodoo2](https://dege.freeweb.hu/dgVoodoo2/dgVoodoo2) comes with three files:
+`dgVoodoo2` comes with three files:
 
 1. `dgVoodoo.conf`
 2. `D3D8.dll`
@@ -62,6 +62,8 @@ find ~/.steam/steam/steamapps/compatdata -type d -name HorizonXI-Launcher | grep
 ```
 
 ## ReShade
+
+[ReShade](https://reshade.me/) adds post-processing shaders to games in order to provide them with a customized look.
 
 Check out [https://ariel-logos.github.io/ElfyLab/2025/02/20/reshade-update.html](https://ariel-logos.github.io/ElfyLab/2025/02/20/reshade-update.html) for a great ReShade preset.
 
