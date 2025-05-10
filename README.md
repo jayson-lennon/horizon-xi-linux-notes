@@ -72,23 +72,25 @@ Check out [https://ariel-logos.github.io/ElfyLab/2025/02/20/reshade-update.html]
 
 I've split this into multiple sections since there are a fair number of steps.
 
+Note that if you are running on Steamdeck, then you will only be able to get away with a few effects before having noticeable performance drops. Also, you'll definitely want a mouse+keyboard for the setup and configuring the effects in game.
+
 ### Install ReShade
 
 First let's get ReShade installed:
 
 1. Download [ReShade](https://reshade.me/) _with full add-on support_. The download link is at the bottom of the ReShade page.
-2. Copy the downloaded .exe to the `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader` directory
+2. Copy the downloaded `.exe` to the `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader` directory
 3. Navigate to `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`
 4. Run `wine ReShade_Setup_VERSION_Addon.exe`. Replace VERSION with whichever version you downloaded.
 5. After it loads, click `Browse`
 6. Navigate to `My Computer` then `Z:` then to `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`
 7. Select `horizon-loader.exe`
 8. Click `Next`
-9. Select `Microsoft DirectX 10/11/12`.
-10. Select whichever effects you want to install.
-    - Clicking `Browse...` will load a preset and only download the effects for that preset.
-    - Click `Uncheck all` and then `Check all` if you just want to download everything
-11. Click `Next`. Wait for download to complete
+9. Select `Microsoft DirectX 10/11/12`
+10. Select whichever effects you want to install
+    - clicking `Browse...` will load a preset and only download the effects for that preset
+    - click `Uncheck all` and then `Check all` if you just want to download everything
+11. Click `Next` and wait for download to complete
 12. Optionally select additional addons (none are needed). Click `Next` then `Finish`
 
 NOTE: ReShade will _probably not_ work yet! Continue to the next section.
