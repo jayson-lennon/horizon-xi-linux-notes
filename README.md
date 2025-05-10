@@ -23,7 +23,10 @@ Note that this has only been tested when running the game via Steam. It _should_
 Copy these files to `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader` where `$YOUR_INSTALL_DIR` is wherever you chose to install the game.
 
 Add this to your Steam "Launch Options" via `Right click game in Library -> Properties -> Shortcut`:
-    `WINEDLLOVERRIDES="d3d8=n,b" %command%`
+
+```sh
+WINEDLLOVERRIDES="d3d8=n,b" %command%
+```
 
 Copy the `dgVoodoo.conf` from this repo and overwrite the one from the `dgVoodoo2` package. The conf from this repo is configured for a single-GPU system running FFXI in windowed mode.
 
