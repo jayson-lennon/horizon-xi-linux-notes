@@ -1,118 +1,142 @@
-# Horizon XI Linux Notes
+# Horizon XI Linux Setup Notes
 
-## Prereqs
+These notes cover optional steps to improve graphics and visual effects for Horizon XI on Linux, specifically focusing on using **dgVoodoo2** and **ReShade**.
 
-- This has only been tested using Steam with the same configuration from the installation guide at [https://github.com/MattyGWS/HorizonXI-Linux-Installation](https://github.com/MattyGWS/HorizonXI-Linux-Installation)
-- If you want to edit the `dgVoodoo2` config file using `dgVoodooCpl.exe`, then you'll need `wine` installed
-- If you want to use [ReShade](https://reshade.me/), then you'll need `winetricks` installed
+**Important:** This guide assumes you have already installed Horizon XI on Linux using the method described at [https://github.com/MattyGWS/HorizonXI-Linux-Installation](https://github.com/MattyGWS/HorizonXI-Linux-Installation) and are running the game via Steam.
 
-Installing `wine` and `winetricks` on Steamdeck/other systems is outside the scope of this document.
+## Prerequisites
 
-## dgVoodoo2
+To use the tools mentioned in this document, you will need:
 
-[dgVoodoo2](https://dege.freeweb.hu/dgVoodoo2/dgVoodoo2) wraps older graphics API calls with newer ones which lets old games (like FFXI) better utilize modern GPUs. You should get consistently higher FPS when using this.
+* **Wine:** Required if you want to use the configuration tool (`dgVoodooCpl.exe`) for dgVoodoo2 and if you want to use ReShade.
+* **Winetricks:** Required for ReShade to install necessary components.
 
-Note that this has only been tested when running the game via Steam. It _should_ still work without Steam provided you set the correct environment variables.
+*Note: This document does not cover how to install `wine` or `winetricks` on your specific Linux distribution or Steam Deck.*
 
-`dgVoodoo2` comes with three files:
+## dgVoodoo2: Improve Graphics Performance
 
-1. `dgVoodoo.conf`
-2. `D3D8.dll`
-3. `dgVoodooCpl.exe`
+**What it does:** dgVoodoo2 helps older games like Final Fantasy XI work better with modern graphics cards by translating their old graphics commands into ones modern GPUs understand. This usually results in smoother performance and higher frame rates.
 
-Copy these files to `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader` where `$YOUR_INSTALL_DIR` is wherever you chose to install the game.
+**How to set it up:**
 
-Add this to your Steam "Launch Options" via `Right click game in Library -> Properties -> Shortcut`:
+1. **Download dgVoodoo2:** Get the latest version from the official website: [https://dege.freeweb.hu/dgVoodoo2/dgVoodoo2](https://dege.freeweb.hu/dgVoodoo2/dgVoodoo2)
+2. **Extract the files:** From the downloaded archive, you'll need these three files:
+    * `dgVoodoo.conf` (the configuration file)
+    * `D3D8.dll` (a graphics library file)
+    * `dgVoodooCpl.exe` (the configuration tool)
+3. **Copy files to the game folder:** Copy these three files into the `bootloader` directory of your Horizon XI installation.
+    * Find your game installation directory (let's call it `$YOUR_INSTALL_DIR`).
+    * The target directory is `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`.
+    * *Example path:* If you installed in your home folder, this might look like `/home/yourusername/HorizonXI/Game/bootloader`.
+4. **Copy the provided configuration:** Get the `dgVoodoo.conf` file from this repo and copy it over the `dgVoodoo.conf` you just extracted. This file is pre-configured for a single graphics card setup running FFXI in a window.
+5. **Configure Steam Launch Options:** Open Steam, right-click on your Horizon XI game in the Library, select "Properties", and then go to the "Shortcut" section. Add the following to the "Launch Options" box:
 
-```sh
-WINEDLLOVERRIDES="d3d8=n,b" %command%
-```
+    ```sh
+    WINEDLLOVERRIDES="d3d8=n,b" %command%
+    ```
 
-Copy the `dgVoodoo.conf` from this repo and overwrite the one from the `dgVoodoo2` package. The conf from this repo is configured for a single-GPU system running FFXI in windowed mode.
+    *What this does:* This tells Wine (the compatibility layer Steam uses) to load the `D3D8.dll` from the game's directory (`n`) first, and if that doesn't work, fall back to its built-in version (`b`). This ensures dgVoodoo2 is used.
 
-Run the HorizonXI launcher from Steam. Once you start the game, you should immediately see a "dgVoodoo" logo at the bottom-right corner of the screen (as early as the Accept/Decline "Rules of Conduct" disclaimer). If you _do_ see the logo, then that means it's running correctly. You can remove the logo by changing this line from `true` to `false` in the `dgVoodoo.conf` file:
+6. **Verify it's working:** Launch Horizon XI from Steam. You should see a "dgVoodoo" logo in the bottom-right corner of the screen very early on (around the "Rules of Conduct" screen). If you see the logo, dgVoodoo2 is active!
+7. **Hide the logo** To remove the logo, open the `dgVoodoo.conf` file in a text editor and change the line `dgVoodooWatermark = true` to `dgVoodooWatermark = false`.
 
-```conf
-dgVoodooWatermark = false
-```
+If you *do not* see the logo, then you'll likely need to configure your video card using the configuration tool in the next section.
 
-If you _do not_ see the logo (or if you want to change the `dgVoodoo` settings), then you will need to use the included control panel application. Getting this to work is detailed in the next section.
+### Running the dgVoodoo Configuration Tool (`dgVoodooCpl.exe`)
 
-### Running `dgVoodooCpl.exe`
+If you need to change settings for dgVoodoo2 using its graphical tool (`dgVoodooCpl.exe`), follow these steps:
 
-If you want/need to customize `dgVoodoo2` with the provided control panel application, then you'll need to take additional steps:
+1. **Make sure Wine is installed.**
+2. **Open a terminal** and navigate to the `bootloader` directory where you copied the dgVoodoo files (`$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`).
+3. **Run the tool using Wine:** Execute the following command:
 
-1. Make sure `wine` is installed
-2. Navigate to `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`
-3. Run `wine dgVoodooCpl.exe`
-4. Make any necessary changes
-5. Click OK
+    ```sh
+    wine dgVoodooCpl.exe
+    ```
 
-#### Troubleshooting
+4. Make any desired changes in the window that appears and click "OK".
 
-**My video card doesn't show up in the `dgVoodooCpl` dropdown**
+#### Troubleshooting: Video card not showing up
 
-This likely means your default wine prefix is missing certain packages. I don't know the exact packages required to fix this, _but_ if you are using Steam then you can just use the prefix it provides (make sure you are in the `bootloader` directory):
+If your graphics card doesn't appear in the dropdown menu within `dgVoodooCpl.exe`, it likely means you're running the tool with a different Wine setup than the one Steam uses for the game, and the necessary components aren't available there.
 
-```sh
-WINEPREFIX=$HOME/.steam/steam/steamapps/compatdata/HORIZON_NUMBER_HERE/pfx wine dgVoodooCpl.exe
-```
+To fix this, run `dgVoodooCpl.exe` using the *exact same Wine environment* that Steam uses for Horizon XI. You'll need the unique number Steam assigned to the game's compatibility data ("compatdata").
 
-The `HORIZON_NUMBER_HERE` can be found by running:
+1. **Find the game's compatdata number:** Open a terminal and run this command:
 
-```sh
-find ~/.steam/steam/steamapps/compatdata -type d -name HorizonXI-Launcher | grep -oP '/compatdata/\K\d+(?=/pfx/)'
-```
+    ```sh
+    find ~/.steam/steam/steamapps/compatdata -type d -name HorizonXI-Launcher | grep -oP '/compatdata/\K\d+(?=/pfx/)'
+    ```
 
-## ReShade
+    This command searches your Steam installation for the Horizon XI launcher's compatibility folder and prints the number associated with it. Copy this number.
+2. **Run the tool with the correct prefix:** Replace `HORIZON_NUMBER_HERE` with the number from the above command, and run it from the `bootloader` directory:
 
-[ReShade](https://reshade.me/) adds post-processing shaders to games in order to provide them with a customized look.
+    ```sh
+    WINEPREFIX=$HOME/.steam/steam/steamapps/compatdata/HORIZON_NUMBER_HERE/pfx wine dgVoodooCpl.exe
+    ```
 
-Check out [https://ariel-logos.github.io/ElfyLab/2025/02/20/reshade-update.html](https://ariel-logos.github.io/ElfyLab/2025/02/20/reshade-update.html) for a great ReShade preset.
+    *What this does:* `WINEPREFIX` tells Wine to use a specific directory (`$HOME/.steam/steam/steamapps/compatdata/HORIZON_NUMBER_HERE/pfx`) as its environment, which is where Steam keeps the game's Wine setup.
 
-I've split this into multiple sections since there are a fair number of steps.
+## ReShade: Add Post-Processing Visual Effects
 
-Note that if you are running on Steamdeck, then you will only be able to get away with a few effects before having noticeable performance drops. Also, you'll definitely want a mouse+keyboard for the setup and configuring the effects in game.
+**What it does:** ReShade is a tool that applies visual filters and effects (like improved colors, depth of field, ambient occlusion) to games as they are drawn to your screen. This allows you to customize the game's look significantly.
 
-### Install ReShade
+*Note: Using many effects in ReShade can impact performance, especially on less powerful hardware like the Steam Deck. Setup is also much easier with a mouse and keyboard.*
 
-First let's get ReShade installed:
+Follow these steps to install and configure ReShade:
 
-1. Download [ReShade](https://reshade.me/) _with full add-on support_. The download link is at the bottom of the ReShade page.
-2. Copy the downloaded `.exe` to the `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader` directory
-3. Navigate to `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`
-4. Run `wine ReShade_Setup_VERSION_Addon.exe`. Replace VERSION with whichever version you downloaded.
-5. After it loads, click `Browse`
-6. Navigate to `My Computer` then `Z:` then to `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`
-7. Select `horizon-loader.exe`
-8. Click `Next`
-9. Select `Microsoft DirectX 10/11/12`
-10. Select whichever effects you want to install
-    - clicking `Browse...` will load a preset and only download the effects for that preset
-    - click `Uncheck all` and then `Check all` if you just want to download everything
-11. Click `Next` and wait for download to complete
-12. Optionally select additional addons (none are needed). Click `Next` then `Finish`
+### 1. Install ReShade
 
-NOTE: ReShade will _probably not_ work yet! Continue to the next section.
+1. **Download ReShade:** Go to the ReShade website ([https://reshade.me/](https://reshade.me/)) and download the version **with full add-on support**. The download link is usually near the bottom of the page.
+2. **Copy the installer:** Copy the downloaded `.exe` file (e.g., `ReShade_Setup_VERSION_Addon.exe`) into your game's `bootloader` directory (`$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`).
+3. **Open a terminal** and navigate to the `bootloader` directory.
+4. **Run the installer using Wine:** Execute the following command, replacing `VERSION` with the version number you downloaded:
 
-### Install Dependencies
+    ```sh
+    wine ReShade_Setup_VERSION_Addon.exe
+    ```
 
-ReShade requires a shader compiler to work. Steamdeck comes packaged with a compiler in the default wine prefix, but it doesn't work for all the shaders. If you are running on a different distro, then there may not be a compiler at all.
+5. **Select the game:** In the ReShade installer window, click the "Browse" button.
+6. **Navigate to the game executable:** Use the file browser within the installer to go to: `My Computer` -> `Z:` -> `$YOUR_INSTALL_DIR/HorizonXI/Game/bootloader`. Select the file `horizon-loader.exe` and click "Open".
+    *What is Z:?* In Wine's virtual file system, `Z:` usually maps to your computer's root directory (`/`), allowing you to access files outside the virtual Wine drive.
+7. **Choose the rendering API:** Select `Microsoft DirectX 10/11/12`.
+8. **Select effects:** Choose which shader effect collections you want to download.
+    * You can click "Browse..." to load a preset file (often shared by other players) which will automatically select the required effects.
+    * Alternatively, you can click "Uncheck all" and then "Check all" to download *all* available effects (this downloads more data but gives you everything to experiment with).
+9. **Download effects:** Click "Next" and wait for the shaders to download.
+10. **Optional Addons:** If prompted, you can optionally select additional addons (none are typically needed for basic FFXI setup). Click "Next" and then "Finish".
 
-Install this package to get the shaders to compile (you'll need your steamapps [compatdata](#troubleshooting) number again if using Steam):
+*ReShade is installed, but might not work yet. You need the next step.*
+
+### 2. Install Dependencies (Shader Compiler)
+
+ReShade needs a special component called a "shader compiler" to make the visual effects work. Steam Deck and some Linux setups have one, but it might not be the right version or available for all shaders.
+
+Use `winetricks` to install the necessary compiler (`d3dcompiler_47`). You'll need the game's compatdata number again (see the troubleshooting section for dgVoodoo2 if you don't have it).
+
+Open a terminal and run the following command, replacing `HORIZON_NUMBER_HERE` with your game's compatdata number:
 
 ```sh
 WINEPREFIX=$HOME/.steam/steam/steamapps/compatdata/HORIZON_NUMBER_HERE/pfx winetricks d3dcompiler_47
 ```
 
-After installing, proceed to the next section to configure the launcher.
+*What this does:* This command runs `winetricks` using the game's specific Wine environment (`WINEPREFIX`) and tells it to install the `d3dcompiler_47` component.
 
-### Launcher Configuration
+### 3. Configure Launcher for ReShade and dgVoodoo2
 
-Finally we need to set the launcher to use the correct DLLs. On Steam "Launch Options" (`Right click game in Library -> Properties -> Shortcut`), change it to this:
+Finally, you need to tell Steam's Wine environment to load the necessary libraries for both dgVoodoo2 and ReShade.
 
-```
+Go back to the game's "Launch Options" in Steam (`Right click game in Library -> Properties -> Shortcut`) and change the command to this:
+
+```sh
 WINEDLLOVERRIDES="d3d8=n,b;dxgi=n,b;d3dcompiler_47=n,b" %command%
 ```
 
-Note that we added `dxgi` and `d3dcompiler_47`. The `d3d8` is for `dgVoodoo2` and must also be present.
+*What's changed:*
+
+* `d3d8=n,b`: Still needed for dgVoodoo2.
+* `;`: Separates multiple overrides.
+* `dxgi=n,b`: Needed for ReShade to function correctly with DirectX 10/11/12 games.
+* `d3dcompiler_47=n,b`: Ensures the shader compiler you installed is used.
+
+Now, when you launch the game via Steam, both dgVoodoo2 and ReShade should be active! ReShade usually shows a small banner at the top of the screen when the game starts, indicating you can press the `Home` key (or `Fn + Left Arrow` on Steam Deck) to open its configuration overlay.
